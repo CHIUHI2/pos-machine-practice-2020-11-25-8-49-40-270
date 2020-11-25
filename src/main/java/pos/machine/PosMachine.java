@@ -46,14 +46,14 @@ public class PosMachine {
     private String generateReceipt(Map<String, Integer> itemQuantityMapping) {
         StringBuilder receipt = new StringBuilder("***<store earning no money>Receipt***");
 
-        List<ReceiptItemDetail> receiptItemDetailList = this.getReceiptItemDetailList(itemQuantityMapping);
-        for(ReceiptItemDetail receiptItemDetail : receiptItemDetailList) {
-            receipt.append("\nName: ").append(receiptItemDetail.getName()).append(", Quantity: ").append(receiptItemDetail.getQuantity()).append(", Unit price: ").append(receiptItemDetail.getUnitPrice()).append(" (yuan), Subtotal: ").append(receiptItemDetail.getSubTotal()).append(" (yuan)");
+        List<ReceiptItemInfo> receiptItemInfoList = this.getReceiptItemDetailList(itemQuantityMapping);
+        for(ReceiptItemInfo receiptItemInfo : receiptItemInfoList) {
+            receipt.append("\nName: ").append(receiptItemInfo.getName()).append(", Quantity: ").append(receiptItemInfo.getQuantity()).append(", Unit price: ").append(receiptItemInfo.getPrice()).append(" (yuan), Subtotal: ").append(receiptItemInfo.getSubTotal()).append(" (yuan)");
         }
 
         receipt.append("\n----------------------");
 
-        receipt.append("\nTotal: ").append(this.calculateTotal(receiptItemDetailList)).append(" (yuan)");
+        receipt.append("\nTotal: ").append(this.calculateTotal(receiptItemInfoList)).append(" (yuan)");
 
         receipt.append("\n**********************");
 
@@ -66,8 +66,8 @@ public class PosMachine {
     C : check if method returns receipt item detail correctly -> result passed
     A : bug fix -> N/A, enhancement -> N/A
      */
-    private List<ReceiptItemDetail> getReceiptItemDetailList(Map<String, Integer> itemQuantityMapping) {
-        List<ReceiptItemDetail> receiptItemDetailList = new ArrayList<>();
+    private List<ReceiptItemInfo> getReceiptItemDetailList(Map<String, Integer> itemQuantityMapping) {
+        List<ReceiptItemInfo> receiptItemInfoList = new ArrayList<>();
         Map<String, ItemInfo> itemInfoMapping =  this.getItemInfoMapping();
 
         for(Map.Entry<String, Integer> itemQuantityEntry : itemQuantityMapping.entrySet()) {
@@ -78,11 +78,11 @@ public class PosMachine {
                 continue;
             }
 
-            ReceiptItemDetail receiptItemDetail = new ReceiptItemDetail(barCode, itemInfo.getName(), itemInfo.getPrice(), quantity);
-            receiptItemDetailList.add(receiptItemDetail);
+            ReceiptItemInfo receiptItemInfo = new ReceiptItemInfo(barCode, itemInfo.getName(), itemInfo.getPrice(), quantity);
+            receiptItemInfoList.add(receiptItemInfo);
         }
 
-        return receiptItemDetailList;
+        return receiptItemInfoList;
     }
 
     /*
@@ -91,11 +91,11 @@ public class PosMachine {
     C : check if method summarize all subtotal correctly -> result passed
     A : bug fix -> N/A, enhancement -> N/A
      */
-    private Integer calculateTotal(List<ReceiptItemDetail> receiptItemDetailList) {
+    private Integer calculateTotal(List<ReceiptItemInfo> receiptItemInfoList) {
         int total = 0;
 
-        for(ReceiptItemDetail receiptItemDetail : receiptItemDetailList) {
-            total += receiptItemDetail.getSubTotal();
+        for(ReceiptItemInfo receiptItemInfo : receiptItemInfoList) {
+            total += receiptItemInfo.getSubTotal();
         }
 
         return total;
