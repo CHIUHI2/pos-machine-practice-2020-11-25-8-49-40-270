@@ -8,10 +8,10 @@ public class ReceiptItemInfo extends ItemInfo{
     public ReceiptItemInfo(String barcode, String name, int unitPrice, int quantity) {
         super(barcode, name, unitPrice);
         this.quantity = quantity;
-        this.subTotal = unitPrice * quantity;
+        this.subTotal = 0;
     }
 
     public int getQuantity() { return quantity; }
 
-    public int getSubTotal() { return subTotal; }
+    public int getSubTotal() { return super.getPrice() * quantity; }
 }
